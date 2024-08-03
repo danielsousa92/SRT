@@ -210,6 +210,12 @@
     <audio id="alertSound" src="beep.wav"></audio>
 
     <script>
+
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
         // JavaScript code
 
         const elements = {
