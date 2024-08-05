@@ -382,6 +382,18 @@
 
         setInterval(updateTimer, 1000);
     </script>
+
+    <video width="320" height="240" controls loop>
+  <source src="video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+  <script type="text/javascript">
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+        </script>
+    
 </body>
 </html>
 
