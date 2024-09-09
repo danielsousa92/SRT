@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRT Codes - CÓDIGOS TEMPORÁRIOS!!!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 800px; /* Increased max-width for more space */
+        }
+        .container h1 {
+            font-size: 1.8em; /* Increased font-size for better visibility */
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .task {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: space-between; /* Ensure elements are spaced correctly */
+        }
+        label {
+            flex: 0 0 150px;
+            font-size: 1.2em;
+            margin-right: 10px;
+            text-align: left;
+        }
+        .progress-bar {
+            flex: 1;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            height: 30px; /* Height remains the same */
+            margin-right: 10px;
+            overflow: hidden;
+            position: relative;
+            max-width: 50%; /* Reduced width to 50% */
+        }
+        .progress {
+            height: 100%;
+            background-color: #76c7c0;
+            width: 0;
+            transition: width 0.5s;
+        }
+        .timer {
+            flex: 0 0 120px; /* Increased width for timer text */
+            font-size: 1.2em;
+            color: #333;
+            text-align: right;
+        }
+        .timer.disabled {
+            color: #a9a9a9;
+            background-color: transparent;
+        }
+        .disabled {
+            color: #a9a9a9;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        input[disabled] {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .volume-control {
+            margin-bottom: 10px;
+        }
+        /* Hide progress bar and timer text for Pause Timers */
+        #pauseTimerProgress {
+            display: none;
+        }
+        #pauseTimer {
+            display: none;
+        }
+
+        /* Align Pause timer and progress bar to the left */
+        .task.pause {
+            justify-content: flex-start; /* Align items to the left */
+        }
+        .task.pause .progress-bar {
+            max-width: 50%; /* Maintain width for the progress bar */
+        }
+
+        /* Button styling */
+        button {
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SRT Codes</h1>
+        
+        <!-- Production Timer -->
+        <div class="task">
+            <label id="productionLabel">
+                <input type="radio" name="mode" value="production" id="productionRadio"> Production
+            </label>
+            <div class="progress-bar">
+                <div class="progress" id="productionProgress"></div>
+            </div>
+            <div class="timer" id="productionTimer">06:46:00</div>
+        </div>
+
+        <!-- Lunch Timer -->
+        <div class="task">
+            <label id="lunchLabel">
+                <input type="radio" name="mode" value="lunch" id="lunchRadio"> Lunch
+            </label>
+            <div class="progress-bar">
+                <div class="progress" id="lunchProgress"></div>
+            </div>
+            <div class="timer" id="lunchTimer">01:00:00</div>
+        </div>
+
+        <!-- Well-being Timer -->
+        <div class="task">
+            <label id="wellbeingLabel">
+                <input type="radio" name="mode" value="wellbeing" id="wellbeingRadio"> Well-being
+            </label>
+            <div class="progress-bar">
+                <div class="progress" id="wellbeingProgress"></div>
+            </div>
+            <div class="timer" id="wellbeingTimer">00:09:00</div>
+        </div>
+
+        <!-- Meeting Timer -->
+        <div class="task">
+            <label id="meetingLabel">
+                <input type="radio" name="mode" value="meeting" id="meetingRadio"> Meeting
+            </label>
+            <div class="progress-bar">
+                <div class="progress" id="meetingProgress"></div>
+            </div>
+            <div class="timer" id="meetingTimer">00:22:00</div>
+        </div>
+
+        <!-- Coaching Timer -->
+        <div class="task">
+            <label id="coachingLabel">
+                <input type="radio" name="mode" value="coaching" id="coachingRadio"> Coaching
+            </label>
+            <div class="progress-bar">
+                <div class="progress" id="coachingProgress"></div>
+            </div>
+            <div class="timer" id="coachingTimer">00:13:00</div>
+        </div>
+
+        <!-- Break Timer -->
+        <div class="task">
+            <label id="breakLabel">
+                <input type="radio" name="mode" value="break" id="breakRadio"> Break
+            </label>
+            <div class="progress-bar">
+                <div class="progress" id="breakProgress"></div>
+            </div>
+            <div class="timer" id="breakTimer">00:30:00</div>
+        </div>
+
+        <!-- Pause Timer -->
+        <div class="task pause">
+            <label id="pauseLabel">
+</br>
+                <input type="radio" name="mode" value="pause" id="pauseRadio"> Pause timers
+            </label>
+            <div class="timer" id="pauseTimer">09:00:00</div>
+            <div class="progress-bar" id="pauseTimerProgress"></div>
+        </div>
+
+        <div class="controls">
+            <div class="volume-control">
+                <label for="volumeSlider">Volume:</label>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+            </div>
+            <button id="testSoundButton">Test Sound</button>
+        </div>
+
+                   
+        
+    </div>
+
+    <audio id="alertSound" src="beep.wav"></audio>
+
+    <script>
+
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        // JavaScript code
+
+        const elements = {
+            production: {
+                progress: document.getElementById('productionProgress'),
+                timer: document.getElementById('productionTimer'),
+                label: document.getElementById('productionLabel'),
+                radio: document.getElementById('productionRadio')
+            },
+            lunch: {
+                progress: document.getElementById('lunchProgress'),
+                timer: document.getElementById('lunchTimer'),
+                label: document.getElementById('lunchLabel'),
+                radio: document.getElementById('lunchRadio')
+            },
+            wellbeing: {
+                progress: document.getElementById('wellbeingProgress'),
+                timer: document.getElementById('wellbeingTimer'),
+                label: document.getElementById('wellbeingLabel'),
+                radio: document.getElementById('wellbeingRadio')
+            },
+            meeting: {
+                progress: document.getElementById('meetingProgress'),
+                timer: document.getElementById('meetingTimer'),
+                label: document.getElementById('meetingLabel'),
+                radio: document.getElementById('meetingRadio')
+            },
+            coaching: {
+                progress: document.getElementById('coachingProgress'),
+                timer: document.getElementById('coachingTimer'),
+                label: document.getElementById('coachingLabel'),
+                radio: document.getElementById('coachingRadio')
+            },
+            break: {
+                progress: document.getElementById('breakProgress'),
+                timer: document.getElementById('breakTimer'),
+                label: document.getElementById('breakLabel'),
+                radio: document.getElementById('breakRadio')
+            },
+            pause: {
+                progress: document.getElementById('pauseTimerProgress'),
+                timer: document.getElementById('pauseTimer'),
+                label: document.getElementById('pauseLabel'),
+                radio: document.getElementById('pauseRadio')
+            }
+        };
+
+        const durations = {
+            production: 6 * 3600 + 46 * 60, // 6:46:00
+            lunch: 1 * 3600, // 1:00:00
+            wellbeing: 9 * 60, // 0:09:00
+            meeting: 22 * 60, // 0:22:00
+            coaching: 13 * 60, // 0:13:00
+            break: 30 * 60, // 0:30:00
+            pause: 9 * 3600, // 9:00:00
+        };
+
+        let intervalId = null;
+        let activeMode = null;
+        let remainingTime = null;
+        let paused = false;
+
+        function formatTime(seconds) {
+            const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+            const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+        function updateProgress(mode, elapsedTime) {
+            const duration = durations[mode];
+            const percentage = (elapsedTime / duration) * 100;
+            elements[mode].progress.style.width = `${percentage}%`;
+        }
+
+        function startTimer(mode) {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+
+            activeMode = mode;
+            remainingTime = durations[mode];
+            paused = false;
+            
+            intervalId = setInterval(() => {
+                if (!paused) {
+                    remainingTime--;
+                    elements[mode].timer.textContent = formatTime(remainingTime);
+                    updateProgress(mode, durations[mode] - remainingTime);
+
+                    if (remainingTime <= 0) {
+                        clearInterval(intervalId);
+                        alert(`${mode.charAt(0).toUpperCase() + mode.slice(1)} time is up!`);
+                        playAlert();
+                    }
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            paused = true;
+        }
+
+        function resumeTimer() {
+            paused = false;
+        }
+
+        function playAlert() {
+            const alertSound = document.getElementById('alertSound');
+            alertSound.play();
+        }
+
+        document.getElementById('volumeSlider').addEventListener('input', (event) => {
+            const alertSound = document.getElementById('alertSound');
+            alertSound.volume = event.target.value;
+        });
+
+        document.getElementById('testSoundButton').addEventListener('click', () => {
+            playAlert();
+        });
+
+        document.querySelectorAll('input[name="mode"]').forEach((radio) => {
+            radio.addEventListener('change', (event) => {
+                const mode = event.target.value;
+
+                if (mode === 'pause') {
+                    pauseTimer();
+                } else {
+                    startTimer(mode);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
