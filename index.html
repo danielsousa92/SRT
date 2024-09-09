@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRT Codes - CÓDIGOS TEMPORÁRIOS!!!</title>
+    <title>SRT Codes</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -120,7 +120,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>SRT Codes - CÓDIGOS TEMPORÁRIOS!!!</h1>
+        <h1>SRT Codes - CÓDIGOS TEMPORÁRIOS!!!!!!!!!!!!</h1>
         
         <!-- Production Timer -->
         <div class="task">
@@ -191,7 +191,6 @@
         <!-- Pause Timer -->
         <div class="task pause">
             <label id="pauseLabel">
-</br>
                 <input type="radio" name="mode" value="pause" id="pauseRadio"> Pause timers
             </label>
             <div class="timer" id="pauseTimer">09:00:00</div>
@@ -205,15 +204,11 @@
             </div>
             <button id="testSoundButton">Test Sound</button>
         </div>
-
-                   
-        
     </div>
 
     <audio id="alertSound" src="beep.wav"></audio>
 
     <script>
-
         window.addEventListener('beforeunload', function (e) {
             e.preventDefault();
             e.returnValue = '';
@@ -267,90 +262,123 @@
         };
 
         const durations = {
-            production: 6 * 3600 + 46 * 60, // 6:46:00
-            lunch: 1 * 3600, // 1:00:00
-            wellbeing: 9 * 60, // 0:09:00
-            meeting: 22 * 60, // 0:22:00
-            coaching: 13 * 60, // 0:13:00
-            break: 30 * 60, // 0:30:00
-            pause: 9 * 3600, // 9:00:00
+            production: 6 * 60 * 60 + 46 * 60, // 6 hours and 46 minutes
+            lunch: 60 * 60, // 1 hour
+            wellbeing: 9 * 60, // 9 minutes
+            meeting: 22 * 60, // 22 minutes
+            coaching: 13 * 60, // 13 minutes
+            break: 30 * 60, // 30 minutes
+            pause: 1000 * 60 * 60 // 1000 hours
         };
 
-        let intervalId = null;
         let activeMode = null;
-        let remainingTime = null;
-        let paused = false;
+        let startTimes = {
+            production: null,
+            lunch: null,
+            wellbeing: null,
+            meeting: null,
+            coaching: null,
+            break: null,
+            pause: null
+        };
+        let elapsedTimes = {
+            production: 0,
+            lunch: 0,
+            wellbeing: 0,
+            meeting: 0,
+            coaching: 0,
+            break: 0,
+            pause: 0
+        };
+        let isPaused = false;
+        let pausedAt = null;
 
         function formatTime(seconds) {
-            const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
-            const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-            const s = String(seconds % 60).padStart(2, '0');
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
             return `${h}:${m}:${s}`;
         }
 
-        function updateProgress(mode, elapsedTime) {
-            const duration = durations[mode];
-            const percentage = (elapsedTime / duration) * 100;
-            elements[mode].progress.style.width = `${percentage}%`;
-        }
+        function updateTimer() {
+            if (isPaused) return;
 
-        function startTimer(mode) {
-            if (intervalId) {
-                clearInterval(intervalId);
-            }
+            if (activeMode && startTimes[activeMode]) {
+                const elapsed = elapsedTimes[activeMode] + Math.floor((Date.now() - startTimes[activeMode]) / 1000);
+                const remaining = durations[activeMode] - elapsed;
 
-            activeMode = mode;
-            remainingTime = durations[mode];
-            paused = false;
-            
-            intervalId = setInterval(() => {
-                if (!paused) {
-                    remainingTime--;
-                    elements[mode].timer.textContent = formatTime(remainingTime);
-                    updateProgress(mode, durations[mode] - remainingTime);
-
-                    if (remainingTime <= 0) {
-                        clearInterval(intervalId);
-                        alert(`${mode.charAt(0).toUpperCase() + mode.slice(1)} time is up!`);
-                        playAlert();
+                if (remaining <= 0) {
+                    elements[activeMode].timer.textContent = '00:00:00';
+                    elements[activeMode].progress.style.width = '100%';
+                    if (activeMode !== 'pause') {
+                        alertSound.play();
+                    }
+                    disableTimerElements(activeMode);
+                    document.title = '00:00:00';
+                } else {
+                    elements[activeMode].timer.textContent = formatTime(remaining);
+                    const progress = ((durations[activeMode] - remaining) / durations[activeMode]) * 100;
+                    elements[activeMode].progress.style.width = `${progress}%`;
+                    if (activeMode !== 'pause') {
+                        document.title = formatTime(remaining);
                     }
                 }
-            }, 1000);
+            } else if (activeMode === 'pause') {
+                document.title = "Timers paused";
+            }
         }
 
-        function pauseTimer() {
-            paused = true;
+        function disableTimerElements(mode) {
+            for (let key in elements) {
+                if (key === mode) {
+                    elements[key].radio.disabled = true;
+                    elements[key].progress.classList.add('disabled');
+                    elements[key].timer.classList.add('disabled');
+                    elements[key].label.classList.add('disabled');
+                }
+            }
         }
 
-        function resumeTimer() {
-            paused = false;
+        function startTimer(selectedMode) {
+            if (activeMode) {
+                elapsedTimes[activeMode] += Math.floor((Date.now() - startTimes[activeMode]) / 1000);
+            }
+
+            activeMode = selectedMode;
+            startTimes[activeMode] = Date.now();
+
+            alertSound.pause();
+            alertSound.currentTime = 0;
+            updateTimer();
         }
 
-        function playAlert() {
-            const alertSound = document.getElementById('alertSound');
-            alertSound.play();
-        }
-
-        document.getElementById('volumeSlider').addEventListener('input', (event) => {
-            const alertSound = document.getElementById('alertSound');
-            alertSound.volume = event.target.value;
-        });
-
-        document.getElementById('testSoundButton').addEventListener('click', () => {
-            playAlert();
-        });
-
-        document.querySelectorAll('input[name="mode"]').forEach((radio) => {
-            radio.addEventListener('change', (event) => {
-                const mode = event.target.value;
-
-                if (mode === 'pause') {
-                    pauseTimer();
-                } else {
-                    startTimer(mode);
+        document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    if (isPaused) {
+                        elapsedTimes[activeMode] += Math.floor((Date.now() - pausedAt) / 1000);
+                        isPaused = false;
+                        pausedAt = null;
+                    }
+                    startTimer(radio.value);
                 }
             });
         });
+
+        const volumeSlider = document.getElementById('volumeSlider');
+        const testSoundButton = document.getElementById('testSoundButton');
+        const alertSound = document.getElementById('alertSound');
+
+        volumeSlider.addEventListener('input', () => {
+            alertSound.volume = volumeSlider.value;
+        });
+
+        testSoundButton.addEventListener('click', () => {
+            alertSound.currentTime = 0;
+            alertSound.play();
+        });
+
+        setInterval(updateTimer, 1000);
     </script>
 </body>
 </html>
