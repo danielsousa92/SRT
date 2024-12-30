@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRT Codes</title>
+    <title>Activity Codes</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -120,7 +120,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>SRT Codes</h1>
+        <h1>Activity Codes</h1>
         
         <!-- Production Timer -->
         <div class="task">
@@ -130,7 +130,7 @@
             <div class="progress-bar">
                 <div class="progress" id="productionProgress"></div>
             </div>
-            <div class="timer" id="productionTimer">06:24:00</div>
+            <div class="timer" id="productionTimer">06:30:00</div>
         </div>
 
         <!-- Lunch Timer -->
@@ -163,7 +163,7 @@
             <div class="progress-bar">
                 <div class="progress" id="meetingProgress"></div>
             </div>
-            <div class="timer" id="meetingTimer">00:33:00</div>
+            <div class="timer" id="meetingTimer">00:12:00</div>
         </div>
 
         <!-- Coaching Timer -->
@@ -174,7 +174,7 @@
             <div class="progress-bar">
                 <div class="progress" id="coachingProgress"></div>
             </div>
-            <div class="timer" id="coachingTimer">00:24:00</div>
+            <div class="timer" id="coachingTimer">00:39:00</div>
         </div>
 
         <!-- Break Timer -->
@@ -267,11 +267,11 @@
         };
 
         const durations = {
-            production: 6 * 60 * 60 + 24 * 60, // 6 hours and 24 minutes
+            production: 6 * 60 * 60 + 30 * 60, // 6 hours and 30 minutes
             lunch: 60 * 60, // 1 hour
             wellbeing: 9 * 60, // 9 minutes
-            meeting: 33 * 60, // 33 minutes
-            coaching: 24 * 60, // 24 minutes
+            meeting: 12 * 60, // 12 minutes
+            coaching: 39 * 60, // 39 minutes
             break: 30 * 60, // 30 minutes
             pause: 1000 * 60 * 60 // 1000 hours
         };
