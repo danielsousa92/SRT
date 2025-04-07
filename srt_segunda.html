@@ -122,7 +122,7 @@
     <div class="container">
         <h1>Activity Codes</h1>
         
-        <!-- Códigos de atividades -->
+        <!-- Production Timer -->
         <div class="task">
             <label id="productionLabel">
                 <input type="radio" name="mode" value="production" id="productionRadio"> Production
@@ -133,6 +133,7 @@
             <div class="timer" id="productionTimer">06:30:14</div>
         </div>
 
+        <!-- Lunch Timer -->
         <div class="task">
             <label id="lunchLabel">
                 <input type="radio" name="mode" value="lunch" id="lunchRadio"> Lunch
@@ -143,6 +144,7 @@
             <div class="timer" id="lunchTimer">01:00:00</div>
         </div>
 
+        <!-- Well-being Timer -->
         <div class="task">
             <label id="wellbeingLabel">
                 <input type="radio" name="mode" value="wellbeing" id="wellbeingRadio"> Well-being
@@ -153,6 +155,7 @@
             <div class="timer" id="wellbeingTimer">00:09:00</div>
         </div>
 
+        <!-- Meeting Timer -->
         <div class="task">
             <label id="meetingLabel">
                 <input type="radio" name="mode" value="meeting" id="meetingRadio"> Meeting
@@ -160,19 +163,12 @@
             <div class="progress-bar">
                 <div class="progress" id="meetingProgress"></div>
             </div>
-            <div class="timer" id="meetingTimer">00:09:22</div>
+            <div class="timer" id="meetingTimer">00:47:00</div>
         </div>
 
-        <div class="task">
-            <label id="coachingLabel">
-                <input type="radio" name="mode" value="coaching" id="coachingRadio"> Coaching
-            </label>
-            <div class="progress-bar">
-                <div class="progress" id="coachingProgress"></div>
-            </div>
-            <div class="timer" id="coachingTimer">00:41:38</div>
-        </div>
+       
 
+        <!-- Break Timer -->
         <div class="task">
             <label id="breakLabel">
                 <input type="radio" name="mode" value="break" id="breakRadio"> Break
@@ -183,8 +179,10 @@
             <div class="timer" id="breakTimer">00:30:00</div>
         </div>
 
+        <!-- Pause Timer -->
         <div class="task pause">
             <label id="pauseLabel">
+</br>
                 <input type="radio" name="mode" value="pause" id="pauseRadio"> Pause timers
             </label>
             <div class="timer" id="pauseTimer">09:00:00</div>
@@ -198,15 +196,21 @@
             </div>
             <button id="testSoundButton">Test Sound</button>
         </div>
+
+                   
+        
     </div>
 
     <audio id="alertSound" src="beep.wav"></audio>
 
     <script>
+
         window.addEventListener('beforeunload', function (e) {
             e.preventDefault();
             e.returnValue = '';
         });
+
+        // JavaScript code
 
         const elements = {
             production: {
@@ -233,12 +237,7 @@
                 label: document.getElementById('meetingLabel'),
                 radio: document.getElementById('meetingRadio')
             },
-            coaching: {
-                progress: document.getElementById('coachingProgress'),
-                timer: document.getElementById('coachingTimer'),
-                label: document.getElementById('coachingLabel'),
-                radio: document.getElementById('coachingRadio')
-            },
+            
             break: {
                 progress: document.getElementById('breakProgress'),
                 timer: document.getElementById('breakTimer'),
@@ -253,22 +252,14 @@
             }
         };
 
-        let durations = {
-            production: 6 * 60 * 60 + 30 * 60 + 14, // 6 horas, 30 minutos e 14 segundos
-            lunch: 60 * 60, // 1 hora
-            wellbeing: 9 * 60, // 9 minutos
-            meeting: 9 * 60 + 22, // 9 minutos e 22 segundos
-            coaching: 52 * 60 + 2, // 52 minutos e 2 segundos
-            break: 30 * 60, // 30 minutos
-            pause: 1000 * 60 * 60 // 1000 horas (para pausa)
+        const durations = {
+            production: 6 * 60 * 60 + 30 * 60 + 14, // 6 hours, 30 minutes and 14 seconds
+            lunch: 60 * 60, // 1 hour
+            wellbeing: 9 * 60 + 24, // 9 minutes
+            meeting: 47 * 60, // 47 minutes
+            break: 30 * 60, // 30 minutes
+            pause: 1000 * 60 * 60 // 1000 hours
         };
-
-        function formatTime(seconds) {
-            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
-            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-            const s = (seconds % 60).toString().padStart(2, '0');
-            return `${h}:${m}:${s}`;
-        }
 
         let activeMode = null;
         let startTimes = {
@@ -276,7 +267,6 @@
             lunch: null,
             wellbeing: null,
             meeting: null,
-            coaching: null,
             break: null,
             pause: null
         };
@@ -285,12 +275,18 @@
             lunch: 0,
             wellbeing: 0,
             meeting: 0,
-            coaching: 0,
             break: 0,
             pause: 0
         };
         let isPaused = false;
         let pausedAt = null;
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
 
         function updateTimer() {
             if (isPaused) return;
@@ -371,7 +367,12 @@
         });
 
         setInterval(updateTimer, 1000);
+
+
+    
     </script>
 
+
+    
 </body>
 </html>
