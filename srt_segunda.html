@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Codes</title>
+    <style>
+        /* Seu CSS permanece o mesmo */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Activity Codes</h1>
+        
+        <!-- Códigos de atividade... -->
+
+    </div>
+
+    <audio id="alertSound" src="beep.wav"></audio>
+
+    <script>
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        const elements = {
+            production: {
+                progress: document.getElementById('productionProgress'),
+                timer: document.getElementById('productionTimer'),
+                label: document.getElementById('productionLabel'),
+                radio: document.getElementById('productionRadio')
+            },
+            lunch: {
+                progress: document.getElementById('lunchProgress'),
+                timer: document.getElementById('lunchTimer'),
+                label: document.getElementById('lunchLabel'),
+                radio: document.getElementById('lunchRadio')
+            },
+            wellbeing: {
+                progress: document.getElementById('wellbeingProgress'),
+                timer: document.getElementById('wellbeingTimer'),
+                label: document.getElementById('wellbeingLabel'),
+                radio: document.getElementById('wellbeingRadio')
+            },
+            meeting: {
+                progress: document.getElementById('meetingProgress'),
+                timer: document.getElementById('meetingTimer'),
+                label: document.getElementById('meetingLabel'),
+                radio: document.getElementById('meetingRadio')
+            },
+            coaching: {
+                progress: document.getElementById('coachingProgress'),
+                timer: document.getElementById('coachingTimer'),
+                label: document.getElementById('coachingLabel'),
+                radio: document.getElementById('coachingRadio')
+            },
+            break: {
+                progress: document.getElementById('breakProgress'),
+                timer: document.getElementById('breakTimer'),
+                label: document.getElementById('breakLabel'),
+                radio: document.getElementById('breakRadio')
+            },
+            pause: {
+                progress: document.getElementById('pauseTimerProgress'),
+                timer: document.getElementById('pauseTimer'),
+                label: document.getElementById('pauseLabel'),
+                radio: document.getElementById('pauseRadio')
+            }
+        };
+
+        let durations;
+
+        // Função para determinar se é segunda-feira
+        function isMonday() {
+            const today = new Date();
+            return today.getDay() === 1; // 1 é segunda-feira
+        }
+
+        // Verifique se é segunda-feira e defina os códigos de tempo
+        if (isMonday()) {
+            durations = {
+                production: 6 * 60 * 60 + 30 * 60 + 14, // 6 horas, 30 minutos e 14 segundos
+                lunch: 60 * 60, // 1 hora
+                wellbeing: 9 * 60, // 9 minutos
+                meeting: 47 * 60, // 47 minutos
+                coaching: 41 * 60 + 38, // 41 minutos e 38 segundos
+                break: 30 * 60, // 30 minutos
+                pause: 1000 * 60 * 60 // 1000 horas (para pausa)
+            };
+        } else {
+            durations = {
+                production: 6 * 60 * 60 + 30 * 60 + 14, // 6 horas, 30 minutos e 14 segundos
+                lunch: 60 * 60, // 1 hora
+                wellbeing: 9 * 60, // 9 minutos
+                meeting: 9 * 60 + 22, // 9 minutos e 22 segundos
+                coaching: 52 * 60 + 2, // 52 minutos e 2 segundos
+                break: 30 * 60, // 30 minutos
+                pause: 1000 * 60 * 60 // 1000 horas (para pausa)
+            };
+        }
+
+        let activeMode = null;
+        let startTimes = {
+            production: null,
+            lunch: null,
+            wellbeing: null,
+            meeting: null,
+            coaching: null,
+            break: null,
+            pause: null
+        };
+        let elapsedTimes = {
+            production: 0,
+            lunch: 0,
+            wellbeing: 0,
+            meeting: 0,
+            coaching: 0,
+            break: 0,
+            pause: 0
+        };
+        let isPaused = false;
+        let pausedAt = null;
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+        function updateTimer() {
+            if (isPaused) return;
+
+            if (activeMode && startTimes[activeMode]) {
+                const elapsed = elapsedTimes[activeMode] + Math.floor((Date.now() - startTimes[activeMode]) / 1000);
+                const remaining = durations[activeMode] - elapsed;
+
+                if (remaining <= 0) {
+                    elements[activeMode].timer.textContent = '00:00:00';
+                    elements[activeMode].progress.style.width = '100%';
+                    if (activeMode !== 'pause') {
+                        alertSound.play();
+                    }
+                    disableTimerElements(activeMode);
+                    document.title = '00:00:00';
+                } else {
+                    elements[activeMode].timer.textContent = formatTime(remaining);
+                    const progress = ((durations[activeMode] - remaining) / durations[activeMode]) * 100;
+                    elements[activeMode].progress.style.width = `${progress}%`;
+                    if (activeMode !== 'pause') {
+                        document.title = formatTime(remaining);
+                    }
+                }
+            } else if (activeMode === 'pause') {
+                document.title = "Timers paused";
+            }
+        }
+
+        function disableTimerElements(mode) {
+            for (let key in elements) {
+                if (key === mode) {
+                    elements[key].radio.disabled = true;
+                    elements[key].progress.classList.add('disabled');
+                    elements[key].timer.classList.add('disabled');
+                    elements[key].label.classList.add('disabled');
+                }
+            }
+        }
+
+        function startTimer(selectedMode) {
+            if (activeMode) {
+                elapsedTimes[activeMode] += Math.floor((Date.now() - startTimes[activeMode]) / 1000);
+            }
+
+            activeMode = selectedMode;
+            startTimes[activeMode] = Date.now();
+
+            alertSound.pause();
+            alertSound.currentTime = 0;
+            updateTimer();
+        }
+
+        document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    if (isPaused) {
+                        elapsedTimes[activeMode] += Math.floor((Date.now() - pausedAt) / 1000);
+                        isPaused = false;
+                        pausedAt = null;
+                    }
+                    startTimer(radio.value);
+                }
+            });
+        });
+
+        const volumeSlider = document.getElementById('volumeSlider');
+        const testSoundButton = document.getElementById('testSoundButton');
+        const alertSound = document.getElementById('alertSound');
+
+        volumeSlider.addEventListener('input', () => {
+            alertSound.volume = volumeSlider.value;
+        });
+
+        testSoundButton.addEventListener('click', () => {
+            alertSound.currentTime = 0;
+            alertSound.play();
+        });
+
+        setInterval(updateTimer, 1000);
+    </script>
+
+</body>
+</html>
+
