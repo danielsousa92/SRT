@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Activity Codes</title>
+    <style>
+        body { font-family: Arial, sans-serif; background:#f0f0f0; display:flex; justify-content:center; align-items:flex-start; padding:30px; margin:0 }
+        .container { background:#fff; padding:20px; border-radius:8px; width:100%; max-width:900px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .task { display:flex; align-items:center; gap:10px; justify-content:space-between; margin-bottom:14px; }
+        label { width:160px; font-size:1.05em; }
+        .time-inputs { display:flex; gap:6px; align-items:center; }
+        .time-inputs input[type=number] { width:60px; padding:6px; }
+        .progress-bar { flex:1; margin:0 10px; height:30px; border-radius:8px; background:#e0e0e0; overflow:hidden; }
+        .progress { height:100%; background:#76c7c0; width:0%; transition:width .4s; }
+        .timer { width:120px; text-align:right; font-size:1.05em; }
+        button.small { padding:6px 12px; }
+        .controls { margin-top:12px; display:flex; gap:12px; align-items:center }
+        .disabled { opacity:0.5 }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Activity Codes</h1>
+
+    <!-- CONTADOR -->
+    <div class="task">
+        <label><input type="radio" name="mode" value="contador" id="contadorRadio"> Contador</label>
+        <div class="timer" id="contadorTimer">00:00:00</div>
+    </div>
+
+    <!-- Timers WITH editable H M S inputs -->
+    <div class="task">
+        <label><input type="radio" name="mode" value="production" id="productionRadio"> Production</label>
+        <div class="time-inputs">
+            H: <input type="number" id="productionH" min="0" max="10" value="06">
+            M: <input type="number" id="productionM" min="0" max="59" value="30">
+            S: <input type="number" id="productionS" min="0" max="59" value="14">
+        </div>
+        <div class="progress-bar"><div class="progress" id="productionProgress"></div></div>
+        <div class="timer" id="productionTimer">06:30:14</div>
+    </div>
+
+    <div class="task">
+        <label><input type="radio" name="mode" value="lunch" id="lunchRadio"> Lunch</label>
+        <div class="time-inputs">
+            H: <input type="number" id="lunchH" min="0" max="10" value="01">
+            M: <input type="number" id="lunchM" min="0" max="59" value="00">
+            S: <input type="number" id="lunchS" min="0" max="59" value="00">
+        </div>
+        <div class="progress-bar"><div class="progress" id="lunchProgress"></div></div>
+        <div class="timer" id="lunchTimer">01:00:00</div>
+    </div>
+
+    <div class="task">
+        <label><input type="radio" name="mode" value="wellbeing" id="wellbeingRadio"> Well-being</label>
+        <div class="time-inputs">
+            H: <input type="number" id="wellbeingH" min="0" max="10" value="00">
+            M: <input type="number" id="wellbeingM" min="0" max="59" value="09">
+            S: <input type="number" id="wellbeingS" min="0" max="59" value="00">
+        </div>
+        <div class="progress-bar"><div class="progress" id="wellbeingProgress"></div></div>
+        <div class="timer" id="wellbeingTimer">00:09:00</div>
+    </div>
+
+    <div class="task">
+        <label><input type="radio" name="mode" value="coaching" id="coachingRadio"> Coaching</label>
+        <div class="time-inputs">
+            H: <input type="number" id="coachingH" min="0" max="10" value="00">
+            M: <input type="number" id="coachingM" min="0" max="59" value="51">
+            S: <input type="number" id="coachingS" min="0" max="59" value="00">
+        </div>
+        <div class="progress-bar"><div class="progress" id="coachingProgress"></div></div>
+        <div class="timer" id="coachingTimer">00:51:00</div>
+    </div>
+
+    <div class="task">
+        <label><input type="radio" name="mode" value="break" id="breakRadio"> Break</label>
+        <div class="time-inputs">
+            H: <input type="number" id="breakH" min="0" max="10" value="00">
+            M: <input type="number" id="breakM" min="0" max="59" value="30">
+            S: <input type="number" id="breakS" min="0" max="59" value="00">
+        </div>
+        <div class="progress-bar"><div class="progress" id="breakProgress"></div></div>
+        <div class="timer" id="breakTimer">00:30:00</div>
+    </div>
+
+    <!-- NEW: MEETING -->
+    <div class="task">
+        <label><input type="radio" name="mode" value="meeting" id="meetingRadio"> Meeting</label>
+        <div class="time-inputs">
+            H: <input type="number" id="meetingH" min="0" max="10" value="00">
+            M: <input type="number" id="meetingM" min="0" max="59" value="30">
+            S: <input type="number" id="meetingS" min="0" max="59" value="00">
+        </div>
+        <div class="progress-bar"><div class="progress" id="meetingProgress"></div></div>
+        <div class="timer" id="meetingTimer">00:30:00</div>
+    </div>
+
+    <!-- NEW: FB LEARNING -->
+    <div class="task">
+        <label><input type="radio" name="mode" value="fblearning" id="fblearningRadio"> FB Learning</label>
+        <div class="time-inputs">
+            H: <input type="number" id="fblearningH" min="0" max="10" value="00">
+            M: <input type="number" id="fblearningM" min="0" max="59" value="20">
+            S: <input type="number" id="fblearningS" min="0" max="59" value="00">
+        </div>
+        <div class="progress-bar"><div class="progress" id="fblearningProgress"></div></div>
+        <div class="timer" id="fblearningTimer">00:20:00</div>
+    </div>
+
+    <!-- PAUSE -->
+    <div class="task">
+        <label><input type="radio" name="mode" value="pause" id="pauseRadio"> Pause</label>
+        <div class="timer" id="pauseTimer"></div>
+    </div>
+
+    <div class="controls">
+        <label for="volumeSlider">Volume:</label>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+        <button id="testSoundButton" class="small">Test Sound</button>
+    </div>
+
+    <div class="card">
+        <h2>Subtrair Tempo de Produção</h2>
+        <label for="time1">Production feito (HH:MM:SS)</label>
+        <input id="time1" type="text" placeholder="HH:MM:SS" />
+
+        <label for="time2">Target (HH:MM:SS)</label>
+        <input id="time2" type="text" placeholder="HH:MM:SS" />
+
+        <button id="calc">Calcular</button>
+        <div id="output" class="result" aria-live="polite">Resultado: </div>
+    </div>
+</div>
+
+<audio id="alertSound" src="beep.wav"></audio>
+
+<script>
+(function(){
+    function pad(v){ return String(v).padStart(2,'0'); }
+    function formatSecs(s){ const h = Math.floor(s/3600); const m = Math.floor(s%3600/60); const sec = s%60; return pad(h)+":"+pad(m)+":"+pad(sec); }
+
+    const elements = {
+        production:{progress:productionProgress,timer:productionTimer,radio:productionRadio},
+        lunch:{progress:lunchProgress,timer:lunchTimer,radio:lunchRadio},
+        wellbeing:{progress:wellbeingProgress,timer:wellbeingTimer,radio:wellbeingRadio},
+        coaching:{progress:coachingProgress,timer:coachingTimer,radio:coachingRadio},
+        break:{progress:breakProgress,timer:breakTimer,radio:breakRadio},
+        meeting:{progress:meetingProgress,timer:meetingTimer,radio:meetingRadio},
+        fblearning:{progress:fblearningProgress,timer:fblearningTimer,radio:fblearningRadio},
+        pause:{progress:null,timer:pauseTimer,radio:pauseRadio}
+    };
+
+    const timeInputs = {
+        production:{H:productionH,M:productionM,S:productionS},
+        lunch:{H:lunchH,M:lunchM,S:lunchS},
+        wellbeing:{H:wellbeingH,M:wellbeingM,S:wellbeingS},
+        coaching:{H:coachingH,M:coachingM,S:coachingS},
+        break:{H:breakH,M:breakM,S:breakS},
+        meeting:{H:meetingH,M:meetingM,S:meetingS},
+        fblearning:{H:fblearningH,M:fblearningM,S:fblearningS}
+    };
+
+    const contador={radio:contadorRadio,timer:contadorTimer};
+
+    const alertSound=document.getElementById('alertSound');
+
+    let durations={production:0,lunch:0,wellbeing:0,coaching:0,break:0,meeting:0,fblearning:0,pause:999*3600};
+    let activeMode=null;
+    let startTimes={production:null,lunch:null,wellbeing:null,coaching:null,break:null,meeting:null,fblearning:null,pause:null};
+    let elapsedTimes={production:0,lunch:0,wellbeing:0,coaching:0,break:0,meeting:0,fblearning:0,pause:0};
+
+    let contadorActive=false, contadorStart=null, contadorElapsed=0;
+
+    function updateDurations(){
+        for(const id in timeInputs){
+            const obj=timeInputs[id];
+            const h=Math.max(0,Math.min(10,Number(obj.H.value)||0));
+            const m=Math.max(0,Math.min(59,Number(obj.M.value)||0));
+            const s=Math.max(0,Math.min(59,Number(obj.S.value)||0));
+            obj.H.value=h; obj.M.value=m; obj.S.value=s;
+            durations[id]=h*3600+m*60+s;
+
+            if(activeMode!==id){
+                elements[id].timer.textContent=formatSecs(durations[id]);
+                elements[id].progress.style.width='0%';
+                elapsedTimes[id]=0;
+            }
+        }
+    }
+
+    for(const id in timeInputs){
+        ['H','M','S'].forEach(part=>{
+            timeInputs[id][part].addEventListener('change',updateDurations);
+        });
+    }
+
+    function startTimer(mode){
+        if(activeMode){
+            if(startTimes[activeMode]) elapsedTimes[activeMode]+=Math.floor((Date.now()-startTimes[activeMode])/1000);
+        }
+        activeMode=mode;
+        startTimes[mode]=Date.now();
+    }
+
+    document.querySelectorAll('input[name="mode"]').forEach(r=>{
+        r.addEventListener('change',()=>{
+            if(!r.checked) return;
+            if(r.value==='contador'){
+                if(activeMode){
+                    elapsedTimes[activeMode]+=Math.floor((Date.now()-startTimes[activeMode])/1000);
+                    activeMode=null;
+                }
+                if(!contadorActive){ contadorActive=true; contadorStart=Date.now(); }
+            } else {
+                if(contadorActive){ contadorActive=false; contadorElapsed+=Math.floor((Date.now()-contadorStart)/1000); }
+                startTimer(r.value);
+            }
+        });
+    });
+
+    volumeSlider.addEventListener('input',()=> alertSound.volume=volumeSlider.value);
+    testSoundButton.addEventListener('click',()=>{ alertSound.currentTime=0; alertSound.play(); });
+
+    setInterval(()=>{
+        if(contadorActive){ const e=contadorElapsed+Math.floor((Date.now()-contadorStart)/1000); contador.timer.textContent=formatSecs(e); }
+
+        if(activeMode){
+            const el=elements[activeMode];
+            const elapsed=elapsedTimes[activeMode]+Math.floor((Date.now()-startTimes[activeMode])/1000);
+            const remaining=durations[activeMode]-elapsed;
+            if(remaining<=0){ el.timer.textContent='00:00:00'; if(el.progress) el.progress.style.width='100%'; alertSound.play(); activeMode=null; return; }
+            el.timer.textContent=formatSecs(remaining);
+            if(el.progress){ el.progress.style.width=((durations[activeMode]-remaining)/durations[activeMode])*100+'%'; }
+            document.title=formatSecs(remaining);
+        }
+    },250);
+
+    updateDurations();
+})();
+</script>
+
+</body>
+</html>
+
