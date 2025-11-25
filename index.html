@@ -238,6 +238,39 @@
     },250);
 
     updateDurations();
+
+document.getElementById("calc").addEventListener("click", () => {
+    const t1 = document.getElementById("time1").value.trim();
+    const t2 = document.getElementById("time2").value.trim();
+    const output = document.getElementById("output");
+
+    function toSeconds(str){
+        const parts = str.split(":").map(Number);
+        if(parts.length !== 3 || parts.some(isNaN)) return null;
+        return parts[0]*3600 + parts[1]*60 + parts[2];
+    }
+
+    function formatSeconds(sec){
+        const h = Math.floor(sec/3600);
+        const m = Math.floor((sec%3600)/60);
+        const s = sec%60;
+        return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+    }
+
+    const s1 = toSeconds(t1);
+    const s2 = toSeconds(t2);
+
+    if(s1 === null || s2 === null){
+        output.textContent = "Resultado: formato inválido!";
+        return;
+    }
+
+    let diff = s2 - s1;
+    if(diff < 0) diff = 0;
+
+    output.textContent = "Resultado: " + formatSeconds(diff);
+});
+
 })();
 </script>
 
