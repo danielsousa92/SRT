@@ -230,7 +230,7 @@
             const el=elements[activeMode];
             const elapsed=elapsedTimes[activeMode]+Math.floor((Date.now()-startTimes[activeMode])/1000);
             const remaining=durations[activeMode]-elapsed;
-            if(remaining<=0){ el.timer.textContent='00:00:00'; if(el.progress) el.progress.style.width='100%'; alertSound.play(); activeMode=null; return; }
+            if(remaining<=0){ el.timer.textContent='00:00:00'; if(el.progress) el.progress.style.width='100%'; alertSound.play();  return; }
             el.timer.textContent=formatSecs(remaining);
             if(el.progress){ el.progress.style.width=((durations[activeMode]-remaining)/durations[activeMode])*100+'%'; }
             document.title=formatSecs(remaining);
